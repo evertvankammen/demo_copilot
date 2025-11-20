@@ -1,0 +1,14 @@
+### Create a new product
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "Test Product",
+  "price": 99.99
+}
+
+### Get all products
+GET http://localhost:8080/api/products
+
+### Get product by ID
+GET http://localhost:8080/api/products/1

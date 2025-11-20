@@ -57,6 +57,37 @@ class RequestedValueControllerTest {
     }
 
     @Test
+    void getLastRetrieved_ShouldReturnField_WhenEntityExists() throws Exception {
+        Long id = 1L;
+        LocalDateTime lastRetrieved = LocalDateTime.of(2023, 1, 2, 12, 0);
+        RequestedValueEntity entity = new RequestedValueEntity("val", LocalDateTime.now(), lastRetrieved);
+        java.lang.reflect.Field idField = RequestedValueEntity.class.getDeclaredField("id");
+        idField.setAccessible(true);
+        idField.set(entity, id);
+
+        given(repository.findById(id)).willReturn(Optional.of(entity));
+
+        mockMvc.perform(get("/api/requested-values/{id}/last_retrieved", id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.last_retrieved").exists());
+    }
+
+    @Test
+    void getId_ShouldReturnField_WhenEntityExists() throws Exception {
+        Long id = 1L;
+        RequestedValueEntity entity = new RequestedValueEntity("val", LocalDateTime.now(), LocalDateTime.now());
+        java.lang.reflect.Field idField = RequestedValueEntity.class.getDeclaredField("id");
+        idField.setAccessible(true);
+        idField.set(entity, id);
+
+        given(repository.findById(id)).willReturn(Optional.of(entity));
+
+        mockMvc.perform(get("/api/requested-values/{id}/id", id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id));
+    }
+
+    @Test
     void getField_ShouldReturn404_WhenEntityDoesNotExist() throws Exception {
         Long id = 99L;
         given(repository.findById(id)).willReturn(Optional.empty());
