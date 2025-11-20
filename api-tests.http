@@ -1,0 +1,61 @@
+### Get field 'id' from entity with ID 1
+GET http://localhost:8080/api/requested-values/1/id
+Accept: application/json
+
+###
+
+### Get field 'requested_value' from entity with ID 1
+GET http://localhost:8080/api/requested-values/1/requested_value
+Accept: application/json
+
+###
+
+### Get field 'created' from entity with ID 1
+GET http://localhost:8080/api/requested-values/1/created
+Accept: application/json
+
+###
+
+### Get field 'last_retrieved' from entity with ID 1
+GET http://localhost:8080/api/requested-values/1/last_retrieved
+Accept: application/json
+
+###
+
+### Test with non-existent entity (should return 404)
+GET http://localhost:8080/api/requested-values/999/id
+Accept: application/json
+
+###
+
+### Test with invalid field (should return 400)
+GET http://localhost:8080/api/requested-values/1/invalid_field
+Accept: application/json
+
+###
+
+### Get field from entity with ID 2
+GET http://localhost:8080/api/requested-values/2/requested_value
+Accept: application/json
+
+###
+
+### Create new requested value
+POST http://localhost:8080/api/requested-values
+Content-Type: application/json
+Accept: application/json
+
+{
+	"requested_value": "alpha-value"
+}
+
+###
+
+### Attempt create with missing value (should 400)
+POST http://localhost:8080/api/requested-values
+Content-Type: application/json
+Accept: application/json
+
+{}
+
+###

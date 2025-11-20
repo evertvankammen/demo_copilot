@@ -10,7 +10,10 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -110,5 +113,30 @@ class RequestedValueControllerTest {
         mockMvc.perform(get("/api/requested-values/{id}/invalid_field", id))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").value("Invalid field requested"));
+    }
+
+    @Test
+    void create_ShouldReturnId_WhenPayloadValid() throws Exception {
+        RequestedValueEntity entity = new RequestedValueEntity("new-val", LocalDateTime.now(), LocalDateTime.now());
+        java.lang.reflect.Field idField = RequestedValueEntity.class.getDeclaredField("id");
+        idField.setAccessible(true);
+        idField.set(entity, 10L);
+
+        when(repository.save(any(RequestedValueEntity.class))).thenReturn(entity);
+
+        mockMvc.perform(post("/api/requested-values")
+                .contentType("application/json")
+                .content("{\n  \"requested_value\": \"new-val\"\n}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(10L));
+    }
+
+    @Test
+    void create_ShouldReturn400_WhenMissingValue() throws Exception {
+        mockMvc.perform(post("/api/requested-values")
+                .contentType("application/json")
+                .content("{}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("requested_value is required"));
     }
 }
