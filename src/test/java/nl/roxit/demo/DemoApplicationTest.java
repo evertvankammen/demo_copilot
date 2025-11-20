@@ -1,7 +1,6 @@
 package nl.roxit.demo;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
@@ -27,8 +26,7 @@ class DemoApplicationTest {
     void mainMethodRunsWithoutException() {
         assertDoesNotThrow(() -> {
             DemoApplication.main(new String[]{
-                "--spring.main.web-application-type=none",
-                "--spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+                "--spring.main.web-application-type=none"
             });
         });
     }
