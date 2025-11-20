@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 import java.util.Collections;
 import java.util.Map;
 
@@ -15,6 +17,21 @@ public class RequestedValueController {
 
     public RequestedValueController(RequestedValueRepository repository) {
         this.repository = repository;
+    }
+
+    @PostMapping
+    public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Object> body) {
+        Object raw = body.get("requested_value");
+        if (raw == null || raw.toString().trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("error", (Object) "requested_value is required"));
+        }
+        String requestedValue = raw.toString();
+        LocalDateTime now = LocalDateTime.now();
+        RequestedValueEntity entity = new RequestedValueEntity(requestedValue, now, now);
+        RequestedValueEntity saved = repository.save(entity);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap("id", (Object) saved.getId()));
     }
 
     @GetMapping("/{id}/{field}")

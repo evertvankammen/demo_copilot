@@ -39,3 +39,23 @@ GET http://localhost:8080/api/requested-values/2/requested_value
 Accept: application/json
 
 ###
+
+### Create new requested value
+POST http://localhost:8080/api/requested-values
+Content-Type: application/json
+Accept: application/json
+
+{
+	"requested_value": "alpha-value"
+}
+
+###
+
+### Attempt create with missing value (should 400)
+POST http://localhost:8080/api/requested-values
+Content-Type: application/json
+Accept: application/json
+
+{}
+
+###
