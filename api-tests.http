@@ -51,11 +51,45 @@ Accept: application/json
 
 ###
 
-### Attempt create with missing value (should 400)
+### Create new requested value with name
 POST http://localhost:8080/api/requested-values
 Content-Type: application/json
 Accept: application/json
 
-{}
+{
+	"name": "config-key",
+	"requested_value": "value1"
+}
+
+###
+
+### Get active value for name
+GET http://localhost:8080/api/requested-values/active/config-key
+Accept: application/json
+
+###
+
+### Update value for name (creates new version)
+PUT http://localhost:8080/api/requested-values/config-key
+Content-Type: application/json
+Accept: application/json
+
+{
+	"requested_value": "value2"
+}
+
+###
+
+### Get versions for name
+GET http://localhost:8080/api/requested-values/config-key/versions
+Accept: application/json
+
+###
+
+### Activate a specific version
+PUT http://localhost:8080/api/requested-values/config-key/versions/2/activate
+Accept: application/json
+
+###
 
 ###
